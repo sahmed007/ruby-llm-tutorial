@@ -1,0 +1,192 @@
+#!/bin/bash
+
+set -e
+
+# Build a custom Ruby 3.3 WASM base binary with JS interop support.
+#
+# Uses Gemfile.base (contains only `gem "js"`) so that the `js` gem's native
+# C extension is statically linked into the binary. This provides:
+#   - Component model ABI exports (canonical_abi_drop_rb-abi-value, etc.)
+#   - Reactor adapter (_initialize instead of _start)
+#   - __wasi_vfs_rt_init call path (activates wasi-vfs packed data at startup)
+#
+# The js gem's extconf.rb unconditionally sets -DJS_ENABLE_COMPONENT_MODEL=1,
+# so these exports appear in the output even without RUBY_WASM_EXPERIMENTAL_COMPONENT_MODEL.
+# The output is a core WASM module (not a component), compatible with both
+# wasi-vfs pack and @ruby/wasm-wasi's RubyVM.instantiateModule.
+#
+# This is a one-time build (5-20 minutes). The resulting binary is used
+# by bin/build-pack as the base for dynamic gem packing.
+#
+# Prerequisites:
+#   - Ruby 3.3+
+#   - ruby_wasm gem (gem install ruby_wasm)
+#   - Rust toolchain (for ruby_wasm native extension)
+#   - WASI SDK (auto-downloaded by rbwasm if WASI_SDK_PATH not set)
+#   - ~2GB disk space for build artifacts
+#
+# Usage: ./bin/build-ruby-base
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TEMPLATE_DIR="$(dirname "$SCRIPT_DIR")"
+RUBY_WASM_DIR="$TEMPLATE_DIR/ruby-wasm"
+OUTPUT="$RUBY_WASM_DIR/dist/ruby-base.wasm"
+
+export BUNDLE_GEMFILE="$RUBY_WASM_DIR/Gemfile.base"
+
+echo "=== Building custom Ruby WASM base binary (with JS interop) ==="
+echo
+
+# --- Preflight checks --------------------------------------------------------
+
+if ! bundle exec rbwasm --version &> /dev/null && ! command -v rbwasm &> /dev/null; then
+  echo "Error: rbwasm CLI not found"
+  echo "Install it with: gem install ruby_wasm"
+  exit 1
+fi
+
+# --- Prepare Gemfile.base lockfile -------------------------------------------
+
+echo "Resolving Gemfile.base dependencies..."
+bundle lock --add-platform wasm32-wasi 2>/dev/null || bundle lock
+echo
+
+echo "Installing Gemfile.base gems (ensures js gem is available for static linking)..."
+bundle install
+echo
+
+# --- Build -------------------------------------------------------------------
+
+echo "Building Ruby 3.3 for wasm32-unknown-wasip1..."
+echo "  --build-profile full (all stdlib C extensions)"
+echo "  Gemfile.base: gem \"js\" (provides ABI exports + reactor adapter)"
+echo
+echo "This will take 5-20 minutes on first run."
+echo
+
+mkdir -p "$(dirname "$OUTPUT")"
+
+# IMPORTANT: Use `bundle exec` so that Bundler is loaded in the rbwasm process.
+# Without it, rbwasm's `defined?(Bundler)` check returns nil, causing it to
+# skip gem resolution entirely — the js gem won't be statically linked, and
+# the binary will be missing ABI exports (_initialize, canonical_abi_drop_rb-abi-value).
+#
+# We invoke rbwasm via a Ruby wrapper instead of the CLI directly, because
+# ruby_wasm hardcodes the Ruby tarball URL for `--ruby-version 3.3` as 3.3.3.
+# The monolithic pipeline uses wasmify-rails which monkey-patches this to 3.3.8.
+# We apply the same monkey-patch here to ensure version parity.
+# See: wasmify-rails-0.4.0/lib/wasmify/rails/builder.rb:9-16
+bundle exec ruby -e '
+require "ruby_wasm"
+require "ruby_wasm/cli"
+
+# Monkey-patch: override Ruby 3.3 tarball URL to 3.3.8 (matches wasmify-rails)
+RubyWasm::CLI.singleton_class.prepend(Module.new do
+  def build_source_aliases(root)
+    super.tap do |sources|
+      sources["3.3"][:url] = "https://cache.ruby-lang.org/pub/ruby/3.3/ruby-3.3.8.tar.gz"
+    end
+  end
+end)
+
+RubyWasm::CLI.new(stdout: $stdout, stderr: $stderr).run(ARGV)
+' -- build \
+  --ruby-version 3.3 \
+  --target wasm32-unknown-wasip1 \
+  --build-profile full \
+  -o "$OUTPUT"
+
+# --- Use raw pre-VFS binary (Strategy A) -----------------------------------
+# rbwasm build outputs a VFS-packed binary (stdlib + js gem embedded).
+# Using that as input to a second wasi-vfs pack causes double-packing, which
+# crashes in WebContainer. Instead, we use the raw pre-VFS binary that rbwasm
+# left in its rubies/ directory and do a single wasi-vfs pack in pack-gems.
+
+RAW_BINARY=$(find "$RUBY_WASM_DIR/rubies" -name "ruby" -path "*/usr/local/bin/ruby" -type f 2>/dev/null | head -1)
+
+if [ -z "$RAW_BINARY" ]; then
+  echo
+  echo "ERROR: Could not find raw pre-VFS binary in rubies/ directory."
+  echo "Expected: $RUBY_WASM_DIR/rubies/ruby-3.3-wasm32-unknown-wasip1-full-*/usr/local/bin/ruby"
+  echo
+  echo "The rbwasm build may have failed or cleaned up its build directory."
+  exit 1
+fi
+
+echo "Found raw pre-VFS binary: $RAW_BINARY"
+
+# Record the usr/ directory path so pack-gems can map /usr in the single pack
+# RAW_BINARY is at .../usr/local/bin/ruby — go up 3 levels to get .../usr/
+USR_DIR="$(dirname "$(dirname "$(dirname "$RAW_BINARY")")")"
+echo "$USR_DIR" > "$RUBY_WASM_DIR/dist/usr-dir.txt"
+echo "Saved usr/ path to dist/usr-dir.txt: $USR_DIR"
+
+# Overwrite the VFS-packed output with the raw binary
+cp "$RAW_BINARY" "$OUTPUT"
+echo "Replaced VFS-packed output with raw pre-VFS binary (single-pack strategy)"
+
+# Copy rbconfig.rb for release (needed by dynamic gem packing)
+RBCONFIG_SRC="$USR_DIR/local/lib/ruby/3.3.0/wasm32-wasi/rbconfig.rb"
+RBCONFIG_DST="$RUBY_WASM_DIR/rbconfig/wasm32-wasi/rbconfig.rb"
+if [ -f "$RBCONFIG_SRC" ]; then
+  mkdir -p "$(dirname "$RBCONFIG_DST")"
+  cp "$RBCONFIG_SRC" "$RBCONFIG_DST"
+  echo "Copied rbconfig.rb to $RBCONFIG_DST"
+else
+  echo "WARNING: rbconfig.rb not found at $RBCONFIG_SRC"
+fi
+
+SIZE=$(du -h "$OUTPUT" | cut -f1)
+
+# --- Post-build verification ------------------------------------------------
+# Verify the binary has the required exports for @ruby/wasm-wasi JS bindings.
+# Without these, the binary will fail at runtime with a cryptic
+# "FinalizationRegistry: cleanup must be callable" error.
+
+echo "Verifying binary exports..."
+# Temporarily disable set -e so we can capture the exit code and show a helpful message
+set +e
+VERIFY_RESULT=$(node -e "
+const fs = require('fs');
+const buf = fs.readFileSync('$OUTPUT');
+WebAssembly.compile(buf).then(mod => {
+  const names = WebAssembly.Module.exports(mod).map(e => e.name);
+  const checks = {
+    '_initialize': names.includes('_initialize'),
+    'canonical_abi_drop_rb-abi-value': names.includes('canonical_abi_drop_rb-abi-value'),
+    'wasi_vfs_pack_fs': names.includes('wasi_vfs_pack_fs'),
+  };
+  const failed = Object.entries(checks).filter(([,v]) => !v).map(([k]) => k);
+  if (failed.length > 0) {
+    console.error('MISSING: ' + failed.join(', '));
+    process.exit(1);
+  }
+  console.log('OK: _initialize, canonical_abi_drop_rb-abi-value, wasi_vfs_pack_fs');
+});
+" 2>&1)
+VERIFY_EXIT=$?
+set -e
+
+if [ $VERIFY_EXIT -ne 0 ]; then
+  echo
+  echo "ERROR: Binary is missing required exports!"
+  echo "  $VERIFY_RESULT"
+  echo
+  echo "This usually means the 'js' gem was not statically linked."
+  echo "Check that 'bundle install' with Gemfile.base succeeded and that"
+  echo "the js gem version in Gemfile.base.lock matches what rbwasm resolved."
+  echo
+  echo "Try: rm -rf build/ rubies/ ruby-wasm/dist/ && re-run this script."
+  exit 1
+fi
+
+echo "  $VERIFY_RESULT"
+
+echo
+echo "=== Build Complete ==="
+echo "  Output:  $OUTPUT (raw pre-VFS binary)"
+echo "  Size:    $SIZE"
+echo "  usr dir: $USR_DIR"
+echo
+echo "Now run 'npm run build:wasm:pack' to cross-compile gems and pack the final binary."
+echo "(pack-gems will map /usr from the rubies/ directory for a single wasi-vfs pack)"

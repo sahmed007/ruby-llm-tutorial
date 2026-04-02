@@ -1,0 +1,24 @@
+dist
+.astro
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env
+.env.production
+.DS_Store
+.idea
+
+public/ruby.wasm
+public/ruby.wasm.hash
+
+ruby-wasm/build
+ruby-wasm/dist
+ruby-wasm/tmp
+ruby-wasm/vendor
+ruby-wasm/.bundle
+ruby-wasm/rubies
+
+# Local development linking (created by npm run link:local)
+pnpm-workspace.yaml

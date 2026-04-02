@@ -1,0 +1,106 @@
+#!/bin/bash
+
+set -e
+
+# Dynamic gem packing: cross-compile gems and pack them into a pre-built
+# Ruby WASM base binary via wasi-vfs.
+#
+# This is the fast path (~30s) compared to the monolithic `bin/build-wasm`
+# (~5-20min). Requires a pre-built base binary (from bin/build-ruby-base
+# or downloaded from GitHub Releases).
+#
+# Usage: ./bin/build-pack
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TEMPLATE_DIR="$(dirname "$SCRIPT_DIR")"
+RUBY_WASM_DIR="$TEMPLATE_DIR/ruby-wasm"
+
+echo "=== Dynamic gem packing ==="
+echo
+
+# --- Preflight checks --------------------------------------------------------
+
+if ! command -v wasi-vfs &> /dev/null; then
+  echo "Error: wasi-vfs CLI not found"
+  echo "Install it with: cargo install wasi-vfs-cli"
+  echo "See: https://github.com/aspect-build/aspect-workflows/tree/main/packages/wasi-vfs"
+  exit 1
+fi
+
+# --- Resolve base binary -----------------------------------------------------
+
+echo "Resolving base binary..."
+BASE_WASM=""
+
+# 1. Local build
+if [ -f "$RUBY_WASM_DIR/dist/ruby-base.wasm" ]; then
+  BASE_WASM="$RUBY_WASM_DIR/dist/ruby-base.wasm"
+  echo "  Found: local build (dist/ruby-base.wasm)"
+fi
+
+# 2. GitHub Releases fallback
+if [ -z "$BASE_WASM" ]; then
+  echo "  Not found locally, downloading from GitHub Releases..."
+  DOWNLOAD_DIR="$RUBY_WASM_DIR/dist"
+  mkdir -p "$DOWNLOAD_DIR"
+  DOWNLOAD_PATH="$DOWNLOAD_DIR/ruby-base.wasm"
+
+  REPO="Bakaface/tutorialkit.rb"
+
+  if command -v gh &> /dev/null; then
+    TAG=$(gh release list --repo "$REPO" --json tagName --jq '[.[] | select(.tagName | startswith("ruby-base-"))][0].tagName' 2>/dev/null)
+
+    if [ -n "$TAG" ]; then
+      echo "  Release: $TAG"
+      gh release download "$TAG" --repo "$REPO" --pattern "ruby-base.wasm" --dir "$DOWNLOAD_DIR" --clobber 2>/dev/null
+
+      # Also download rbconfig if not present locally
+      RBCONFIG_DIR="$RUBY_WASM_DIR/rbconfig/wasm32-wasi"
+      if [ ! -f "$RBCONFIG_DIR/rbconfig.rb" ]; then
+        mkdir -p "$RBCONFIG_DIR"
+        gh release download "$TAG" --repo "$REPO" --pattern "rbconfig.rb" --dir "$RBCONFIG_DIR" --clobber 2>/dev/null
+      fi
+    fi
+  fi
+
+  if [ -f "$DOWNLOAD_PATH" ]; then
+    BASE_WASM="$DOWNLOAD_PATH"
+    echo "  Downloaded from GitHub Releases"
+  fi
+fi
+
+if [ -z "$BASE_WASM" ]; then
+  echo
+  echo "Error: No base WASM binary found."
+  echo "Either run 'bin/build-ruby-base' to build one,"
+  echo "or ensure a ruby-base release exists on GitHub."
+  exit 1
+fi
+
+echo
+
+# --- Cross-compile gems + pack -----------------------------------------------
+
+echo "Installing host gems for cross-compilation..."
+cd "$RUBY_WASM_DIR"
+bundle install --path vendor/bundle
+echo
+
+echo "Running pack-gems..."
+bundle exec ruby bin/pack-gems
+echo
+
+# --- Copy output to public/ --------------------------------------------------
+
+echo "Copying ruby.wasm to public directory..."
+cp "$RUBY_WASM_DIR/dist/ruby.wasm" "$TEMPLATE_DIR/public/ruby.wasm"
+echo "  ruby.wasm → public/"
+
+# Generate hash of Gemfile.lock for cache versioning
+GEMFILE_HASH=$(shasum -a 256 "$RUBY_WASM_DIR/Gemfile.lock" | cut -c1-16)
+echo "$GEMFILE_HASH" > "$TEMPLATE_DIR/public/ruby.wasm.hash"
+echo "  ruby.wasm.hash: $GEMFILE_HASH"
+
+echo
+echo "=== Done ==="
+echo "Run 'npm run dev' to test your tutorial."
