@@ -4,21 +4,20 @@ export default defineConfig({
   theme: {
     colors: {
       accent: {
-        50: '#EFF6FF',
-        100: '#DBEAFE',
-        200: '#BFDBFE',
-        300: '#93C5FD',
-        400: '#60A5FA',
-        500: '#3B82F6',
-        600: '#2563EB',
-        700: '#1D4ED8',
-        800: '#1E40AF',
-        900: '#1E3A8A',
-        950: '#172554',
+        50: '#FEF2F2',
+        100: '#FEE2E2',
+        200: '#FECACA',
+        300: '#FCA5A5',
+        400: '#F87171',
+        500: '#DC2626',
+        600: '#B91C1C',
+        700: '#991B1B',
+        800: '#7F1D1D',
+        900: '#651A1A',
+        950: '#450A0A',
       },
     },
   },
-  // required for TutorialKit monorepo development mode
   content: {
     pipeline: {
       include: '**',

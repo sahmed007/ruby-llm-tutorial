@@ -2,10 +2,255 @@
 <slot name="links" />
 <slot name="meta" />
 
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new MutationObserver(() => {
+      const wcLink = document.querySelector('a[href="https://webcontainers.io/"]');
+      if (wcLink && !wcLink.parentElement?.classList?.contains('footer-links')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'footer-links';
+        wrapper.style.cssText = 'display:flex;align-items:center;gap:16px;margin-top:auto;';
+        wcLink.parentElement.insertBefore(wrapper, wcLink);
+        wrapper.appendChild(wcLink);
+        const link = document.createElement('a');
+        link.href = 'https://chamoylabs.com';
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Tutorial by Chamoy Labs';
+        link.className = 'chamoy-link inline-block font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover';
+        wrapper.appendChild(link);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
 <style>
-  /* Rails path links styling */
+  /* ─── Base Typography ─── */
+  :global(body) {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ─── Content Panel Background ─── */
+  :global([data-id="main-panel"] > .bg-tk-elements-app-backgroundColor) {
+    background-color: #f8f8f8 !important;
+  }
+
+  :global(:root[data-theme='dark'] [data-id="main-panel"] > .bg-tk-elements-app-backgroundColor) {
+    background-color: #0d0d0d !important;
+  }
+
+  :global([data-id="main-panel"]) {
+    --tk-elements-breadcrumbs-toggleButton-backgroundColor: #ffffff;
+    --tk-elements-breadcrumbs-toggleButton-backgroundColorHover: #ffffff;
+    --tk-elements-breadcrumbs-toggleButton-backgroundColorSelected: #ffffff;
+    --tk-elements-breadcrumbs-dropdown-backgroundColor: #ffffff;
+  }
+
+  :global(:root[data-theme='dark'] [data-id="main-panel"]) {
+    --tk-elements-breadcrumbs-toggleButton-backgroundColor: #0a0a0a;
+    --tk-elements-breadcrumbs-toggleButton-backgroundColorHover: #0a0a0a;
+    --tk-elements-breadcrumbs-toggleButton-backgroundColorSelected: #0a0a0a;
+    --tk-elements-breadcrumbs-dropdown-backgroundColor: #0a0a0a;
+  }
+
+  :global(.markdown-content) {
+    --content-font-size: 15px;
+    --content-line-height: 26px;
+    --code-font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --code-font-size: 13px;
+    --code-border-radius: 6px;
+    --heading-font-weight: 700;
+    max-width: 720px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Tighter heading sizes for the side panel */
+  :global(.markdown-content h1),
+  :global(.markdown-content h1 :is(code, a)) {
+    font-size: 28px !important;
+    letter-spacing: -0.5px;
+    margin-block-end: 8px;
+  }
+
+  :global(.markdown-content h2),
+  :global(.markdown-content h2 :is(code, a)) {
+    font-size: 22px !important;
+    letter-spacing: -0.3px;
+    margin-block-start: 28px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--tk-border-primary);
+  }
+
+  :global(.markdown-content h3),
+  :global(.markdown-content h3 :is(code, a)) {
+    font-size: 18px !important;
+    margin-block-start: 24px;
+  }
+
+  :global(.markdown-content h4),
+  :global(.markdown-content h4 :is(code, a)) {
+    font-size: 16px !important;
+  }
+
+  /* Paragraph spacing */
+  :global(.markdown-content p) {
+    margin-block-end: 4px;
+  }
+
+  :global(.markdown-content p + p) {
+    margin-block-start: 12px;
+  }
+
+  /* Inline code */
+  :global(.markdown-content p code) {
+    font-size: 13px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  /* Tables */
+  :global(.markdown-content table) {
+    font-size: 14px;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    margin-block: 16px;
+  }
+
+  :global(.markdown-content thead tr th) {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+  }
+
+  :global(.markdown-content tbody tr td) {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  /* Code blocks — tighter */
+  :global(.markdown-content pre) {
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Lists */
+  :global(.markdown-content ul),
+  :global(.markdown-content ol) {
+    gap: 2px;
+    font-size: 15px;
+  }
+
+  :global(.markdown-content li) {
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  /* Callouts */
+  :global(.markdown-content .callout) {
+    border-radius: 8px;
+    font-size: 14px;
+    margin-block: 16px;
+    border-left: none !important;
+  }
+
+  /* ─── Top Bar ─── */
+  :global(nav.bg-tk-elements-topBar-backgroundColor) {
+    background-color: #f8f8f8 !important;
+    border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+    gap: 8px;
+  }
+
+  :global(:root[data-theme='dark'] nav.bg-tk-elements-topBar-backgroundColor) {
+    background-color: #0d0d0d !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Navbar buttons — even spacing */
+  :global(nav.bg-tk-elements-topBar-backgroundColor > div:not(.flex-1)) {
+    margin: 0 !important;
+  }
+
+  :global(nav.bg-tk-elements-topBar-backgroundColor > div:not(.flex-1):empty) {
+    display: none;
+  }
+
+  :global(nav.bg-tk-elements-topBar-backgroundColor button),
+  :global(nav.bg-tk-elements-topBar-backgroundColor > div:not(.flex-1) a) {
+    margin: 0 !important;
+  }
+
+  /* ─── Nav Cards (lesson index) ─── */
+  :global([class*="navCard"]) {
+    border-radius: 10px !important;
+    transition: all 0.2s ease !important;
+  }
+
+  :global([class*="navCard"]:hover) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  :global(:root[data-theme='dark'] [class*="navCard"]:hover) {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ─── Editor Panel Header ─── */
+  :global(:root:not([data-theme='dark'])) {
+    --tk-elements-panel-header-backgroundColor: #ffffff;
+    --tk-elements-panel-headerTab-backgroundColor: #ffffff;
+    --tk-elements-panel-headerTab-borderColor: #ffffff;
+  }
+
+  /* ─── Panel Dividers ─── */
+  :global(.panel-header) {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── Terminal ─── */
+  :global(.xterm) {
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace !important;
+  }
+
+  /* ─── Scrollbar ─── */
+  :global(::-webkit-scrollbar) {
+    width: 6px;
+    height: 6px;
+  }
+
+  :global(::-webkit-scrollbar-thumb) {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+
+  :global(:root[data-theme='dark'] ::-webkit-scrollbar-thumb) {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  :global(::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+
+  /* ─── Rails path links ─── */
   :global(.rails-path-link) {
     text-decoration: none;
     position: relative;
@@ -16,50 +261,76 @@
   }
 
   :global(.rails-path-link code) {
-    color: var(--tk-rails-path-color, #3B82F6);
-    background-color: #f6f8fa;
+    color: var(--tk-text-accent);
+    background-color: #fef2f2;
     padding: 0.2em 0.4em;
     border-radius: 0.25rem;
     font-size: 0.875em;
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
     transition: all 0.2s ease;
   }
 
-  /* Dark mode support */
   :global(.dark .rails-path-link code) {
-    color: var(--tk-rails-path-color-dark, #60A5FA);
-    background-color: #161b22;
+    color: #fca5a5;
+    background-color: #1c1111;
   }
 
-  /* Hover state */
   :global(.rails-path-link:hover code) {
-    color: var(--tk-rails-path-hover-color, #2563EB);
-    background-color: #e7f1ff;
+    color: #991b1b;
+    background-color: #fee2e2;
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
 
   :global(.dark .rails-path-link:hover code) {
-    color: var(--tk-rails-path-hover-color-dark, #93C5FD);
-    background-color: #1f2937;
+    color: #fecaca;
+    background-color: #2a1515;
   }
 
-  /* Active/clicked state */
   :global(.rails-path-link:active code) {
     transform: scale(0.98);
   }
 
-  /* Focus state for accessibility */
   :global(.rails-path-link:focus) {
     outline: none;
   }
 
   :global(.rails-path-link:focus-visible code) {
-    outline: 2px solid var(--tk-rails-path-color, #3B82F6);
+    outline: 2px solid var(--tk-text-accent);
     outline-offset: 2px;
   }
 
-  :global(.dark .rails-path-link:focus-visible code) {
-    outline-color: var(--tk-rails-path-color-dark, #60A5FA);
+  /* ─── Bottom Nav Cards ─── */
+  :global(.markdown-content + .grid) {
+    gap: 8px !important;
+    margin-top: 24px !important;
+    margin-bottom: 16px !important;
+  }
+
+  :global(.content-nav-card) {
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+  }
+
+  :global(.content-nav-card.items-end) {
+    flex-direction: row-reverse !important;
+  }
+
+  :global(.content-nav-card:hover) {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  :global(.content-nav-card .icon) {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+  }
+
+  :global(.content-nav-card span) {
+    font-size: 12px !important;
   }
 </style>

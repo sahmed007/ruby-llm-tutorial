@@ -10,7 +10,8 @@
       "Bash(mv 1-rubyllm-core/4-beyond-text 4-beyond-text)",
       "Bash(rm 1-rubyllm-core/meta.md)",
       "Bash(find:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm run:*)"
     ]
   }
 }
