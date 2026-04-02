@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const p=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const j=JSON.parse\\(p\\); console.log\\(JSON.stringify\\(j.exports,null,2\\)\\)\")",
+      "WebFetch(domain:rubyllm.com)",
+      "Bash(find /Users/samad/Dev/ruby-llm-tutorial/src/content/tutorial -name \".tk-config.json\" -exec sh -c 'echo \"=== $1 ===\" && cat \"$1\"' _ {} \\\\;)",
+      "Bash(mv 1-rubyllm-core/1-getting-started 1-getting-started)",
+      "Bash(mv 1-rubyllm-core/2-chat 2-chat)",
+      "Bash(mv 1-rubyllm-core/3-tools-and-structure 3-tools-and-structure)",
+      "Bash(mv 1-rubyllm-core/4-beyond-text 4-beyond-text)",
+      "Bash(rm 1-rubyllm-core/meta.md)",
+      "Bash(find:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

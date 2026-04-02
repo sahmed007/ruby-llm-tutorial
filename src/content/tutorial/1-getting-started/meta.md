@@ -1,4 +1,4 @@
 ---
 type: part
-title: Getting Started with Rails
+title: Getting Started
 ---
