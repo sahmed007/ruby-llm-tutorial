@@ -1,6 +1,6 @@
 # Fly.io configuration
 # Update 'app' to your Fly.io app name after running: fly apps create <name>
-app = 'my-tutorial'
+app = 'ruby-llm-tutorial'
 primary_region = 'sjc'
 
 [build]
