@@ -23,6 +23,7 @@ gem "tzinfo-data"
 
 # RubyLLM — unified interface for AI providers
 gem "ruby_llm"
+gem "ruby_llm-schema"
 
 # Pin json < 2.8 — newer versions redefine rb_hash_bulk_insert as static,
 # which conflicts with Ruby 3.3's headers during WASM cross-compilation.

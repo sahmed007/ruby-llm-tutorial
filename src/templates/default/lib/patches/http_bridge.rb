@@ -105,6 +105,18 @@ module WasmHTTP
       body = result["binary"] ? Base64.decode64(result["body"]) : result["body"]
       response.instance_variable_set(:@body, body)
 
+      # Override read_body so the faraday-net_http streaming path works.
+      # The JS bridge already collected the full body — yield it as one chunk.
+      captured = body
+      response.define_singleton_method(:read_body) do |dest = nil, &block|
+        if block
+          block.call(captured) unless captured.to_s.empty?
+        elsif dest
+          dest << captured
+        end
+        captured
+      end
+
       response
     end
   end

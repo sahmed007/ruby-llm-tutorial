@@ -1,43 +1,40 @@
-Q3 2024 Revenue Report — Acme Corp
-=====================================
+ACME Corp — Q3 2024 Quarterly Report
 
-Executive Summary
------------------
-Revenue for Q3 2024 reached $4.2 million, a 12% increase over Q3 2023.
-Net profit margin improved to 18% from 14% in the same period last year.
+EXECUTIVE SUMMARY
+Revenue for Q3 2024 reached $48.2M, up 22% year-over-year. All three product
+lines grew, with Cloud Services leading at +41% YoY. Operating margin improved
+to 18.4% from 14.1% in Q3 2023.
 
-Breakdown by Product Line
---------------------------
-  Widget Pro:      $1.8 million  (43% of revenue)  — up 18% YoY
-  Widget Lite:     $1.2 million  (29% of revenue)  — up 6% YoY
-  Support Plans:   $800,000      (19% of revenue)  — up 31% YoY
-  Consulting:      $400,000      ( 9% of revenue)  — down 8% YoY
+PRODUCT LINE PERFORMANCE
 
-Key Highlights
---------------
-- Widget Pro growth driven by 3 new enterprise contracts in EMEA
-- Support Plans fastest-growing segment; expanded customer success team in July
-- Consulting decline reflects strategic shift away from one-time engagements
-- New customers acquired: 234 (vs 198 in Q3 2023, +18%)
-- Customer churn rate: 2.1% (improved from 2.8% in Q3 2023)
-- Average contract value increased 9% to $18,400
+Cloud Services
+  Revenue:  $21.4M  (+41% YoY)
+  Customers: 1,840  (+29% YoY)
+  Key driver: Enterprise tier adoption up 67%; new data-residency features
+  launched in August drove EMEA deals.
 
-Revenue by Region
------------------
-  North America:  $2.1 million  (50%)
-  Europe:         $1.3 million  (31%)
-  Asia Pacific:   $0.8 million  (19%)
+Developer Tools
+  Revenue:  $16.8M  (+15% YoY)
+  Customers: 12,400 (+8% YoY)
+  Key driver: VS Code extension reached 2M installs; CLI v3.0 release in
+  September expanded paid conversions.
 
-Expenses
---------
-  COGS:           $1.4 million  (33% of revenue)
-  R&D:            $0.6 million  (14% of revenue)
-  Sales & Mktg:   $0.5 million  (12% of revenue)
-  G&A:            $0.9 million  (21% of revenue)
-  Net Income:     $0.8 million  (19% of revenue)
+Professional Services
+  Revenue:  $10.0M  (+7% YoY)
+  Projects:  94 completed
+  Key driver: Demand for migration engagements from on-prem to Cloud Services
+  tier; average project size up 18%.
 
-Q4 2024 Outlook
----------------
-Target revenue: $4.8 million
-Full year 2024 target: $16.5 million
-Key initiatives: Widget Pro enterprise expansion, APAC marketing push
+FINANCIALS (in millions USD)
+                   Q3 2024   Q3 2023   Change
+  Total Revenue     48.2      39.5     +22%
+  Gross Profit      31.3      24.6     +27%
+  Gross Margin      65%       62%      +3pp
+  Operating Income   8.9       5.6     +59%
+  Operating Margin  18.4%     14.1%    +4.3pp
+  Net Income         6.2       3.8     +63%
+
+OUTLOOK
+Q4 2024 guidance: $51–53M revenue. Full-year 2024 guidance raised to
+$183–185M (previously $178–182M). Cloud Services expected to exit 2024
+at $90M ARR run rate.

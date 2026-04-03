@@ -14,7 +14,8 @@
       "Bash(npm run:*)",
       "WebFetch(domain:rails-tutorial.evilmartians.io)",
       "Bash(cat /Users/samad/Dev/ruby-llm-tutorial/node_modules/@tutorialkit-rb/astro/dist/default/pages/[...slug].astro)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(grep -r \"Schema\\\\|schema\\\\|with_schema\\\\|output_schema\" /Users/samad/Dev/ruby-llm-tutorial/ruby-wasm/vendor/bundle/ruby/3.3.0/gems/ruby_llm-*/lib/)"
     ]
   }
 }
