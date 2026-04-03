@@ -314,6 +314,7 @@ DEPENDENCIES
   propshaft
   rails (~> 8.0.0)
   ruby_llm
+  ruby_llm-schema
   solid_cable
   solid_cache
   solid_queue
