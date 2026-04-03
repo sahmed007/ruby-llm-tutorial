@@ -35,10 +35,13 @@ jobs:
           ruby-version: 3.3
           bundler-cache: true
 
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Cache ruby.wasm build artifacts
         uses: actions/cache@v4
@@ -55,8 +58,8 @@ jobs:
 
       - name: Build tutorial
         run: |
-          npm install
-          npm run build
+          bun install
+          bun run build
 
       - name: Setup flyctl
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
