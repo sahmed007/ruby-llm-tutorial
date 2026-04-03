@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require "ruby_llm"
 
 # NOTE: Your API key is sent through a CORS proxy. This is a demo environment —
