@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Your First Chat
-focus: /workspace/first_chat.rb
+focus: /workspace/chat/first_chat.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

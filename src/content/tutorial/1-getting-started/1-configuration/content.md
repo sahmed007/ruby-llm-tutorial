@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Installation & Configuration
-focus: /workspace/setup.rb
+focus: /workspace/getting_started/setup.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

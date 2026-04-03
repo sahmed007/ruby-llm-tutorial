@@ -3,7 +3,7 @@ type: tutorial
 openInStackBlitz: false
 meta:
   image: /cover.png
-  title: Mastering RubyLLM
+  title: Getting Started with RubyLLM
   description: An interactive tutorial for RubyLLM — the elegant Ruby interface for AI
 prepareCommands:
   - ['npm install', 'Preparing Ruby runtime']

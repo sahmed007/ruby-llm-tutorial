@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Embeddings
-focus: /workspace/embeddings.rb
+focus: /workspace/beyond_text/embeddings.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

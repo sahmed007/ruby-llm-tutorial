@@ -16,8 +16,9 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
   <div class="flex flex-1">
     <a
       href="/"
-      class="flex items-center text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
+      class="flex items-center gap-2 text-tk-elements-topBar-logo-color hover:text-tk-elements-topBar-logo-colorHover"
     >
+      <img class="h-7 w-auto" src="/rubyllm-logo.png" alt="RubyLLM" style="background: white; border-radius: 4px; padding: 1px;" />
       {logo && <img class="h-5 w-auto dark:hidden" src={logo} />}
       {logo && <img class="h-5 w-auto hidden dark:inline-block" src={logoDark} />}
     </a>

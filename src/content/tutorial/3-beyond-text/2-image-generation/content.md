@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Image Generation
-focus: /workspace/paint.rb
+focus: /workspace/beyond_text/paint.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

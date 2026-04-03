@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Building Tools
-focus: /workspace/calculator_tool.rb
+focus: /workspace/tools_agents/calculator_tool.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

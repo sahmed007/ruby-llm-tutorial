@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Streaming Responses
-focus: /workspace/streaming.rb
+focus: /workspace/chat/streaming.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

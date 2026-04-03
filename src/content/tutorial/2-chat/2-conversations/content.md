@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Conversations & Context
-focus: /workspace/conversations.rb
+focus: /workspace/chat/conversations.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

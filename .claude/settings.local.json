@@ -11,7 +11,9 @@
       "Bash(rm 1-rubyllm-core/meta.md)",
       "Bash(find:*)",
       "Bash(ls:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "WebFetch(domain:rails-tutorial.evilmartians.io)",
+      "Bash(cat /Users/samad/Dev/ruby-llm-tutorial/node_modules/@tutorialkit-rb/astro/dist/default/pages/[...slug].astro)"
     ]
   }
 }

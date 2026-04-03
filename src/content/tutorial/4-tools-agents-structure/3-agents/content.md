@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Agents
-focus: /workspace/agents.rb
+focus: /workspace/tools_agents/agents.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

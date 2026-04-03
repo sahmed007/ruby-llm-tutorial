@@ -1,24 +1,21 @@
 <slot name="title" />
 <slot name="links" />
 <slot name="meta" />
+<link rel="icon" type="image/png" href="/rubyllm-logo.png" />
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const observer = new MutationObserver(() => {
       const wcLink = document.querySelector('a[href="https://webcontainers.io/"]');
-      if (wcLink && !wcLink.parentElement?.classList?.contains('footer-links')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'footer-links';
-        wrapper.style.cssText = 'display:flex;align-items:center;gap:16px;margin-top:auto;';
-        wcLink.parentElement.insertBefore(wrapper, wcLink);
-        wrapper.appendChild(wcLink);
-        const link = document.createElement('a');
-        link.href = 'https://chamoylabs.com';
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = 'Tutorial by Chamoy Labs';
-        link.className = 'chamoy-link inline-block font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover';
-        wrapper.appendChild(link);
+      if (wcLink && !wcLink.dataset.replaced) {
+        const cls = 'inline-block font-size-3.5 underline text-tk-elements-link-secondaryColor hover:text-tk-elements-link-secondaryColorHover';
+        const attribution = document.createElement('p');
+        attribution.style.cssText = 'margin-top:auto;font-size:0.875rem;';
+        attribution.innerHTML =
+          'Proudly built by <a href="https://chamoylabs.com" target="_blank" rel="noopener noreferrer" class="' + cls + '">Chamoy Labs</a>' +
+          ' based on <a href="https://rubyllm.com/" target="_blank" rel="noopener noreferrer" class="' + cls + '">RubyLLM</a>' +
+          ' by <a href="https://paolino.me/" target="_blank" rel="noopener noreferrer" class="' + cls + '">Carmine Paolino</a>.';
+        wcLink.replaceWith(attribution);
         observer.disconnect();
       }
     });

@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Exploring the Model Registry
-focus: /workspace/explore_models.rb
+focus: /workspace/getting_started/explore_models.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"

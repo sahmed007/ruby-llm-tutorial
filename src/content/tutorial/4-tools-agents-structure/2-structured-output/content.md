@@ -1,7 +1,8 @@
 ---
 type: lesson
 title: Structured Output
-focus: /workspace/structured_output.rb
+focus: /workspace/tools_agents/structured_output.rb
+scope: /workspace
 custom:
   shell:
     workdir: "/workspace"
