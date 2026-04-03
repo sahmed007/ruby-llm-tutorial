@@ -27,6 +27,14 @@ const logoDark = path.join(import.meta.env.BASE_URL, 'logo-dark.svg');
   <slot name="download-button" />
   <slot name="open-in-stackblitz-link" />
   <slot name="login-button" />
+  <span class="text-sm text-tk-elements-topBar-logo-color mr-3">
+    Built by <a
+      href="https://chamoylabs.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="underline hover:text-tk-elements-topBar-logo-colorHover hover:opacity-80 transition-opacity"
+    >Chamoy Labs</a>
+  </span>
   <HelpDropdown client:only />
   <slot name="theme-switch" />
   <GitHubLink />
