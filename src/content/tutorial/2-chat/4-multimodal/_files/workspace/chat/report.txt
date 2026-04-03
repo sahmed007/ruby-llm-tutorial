@@ -1,0 +1,43 @@
+Q3 2024 Revenue Report — Acme Corp
+=====================================
+
+Executive Summary
+-----------------
+Revenue for Q3 2024 reached $4.2 million, a 12% increase over Q3 2023.
+Net profit margin improved to 18% from 14% in the same period last year.
+
+Breakdown by Product Line
+--------------------------
+  Widget Pro:      $1.8 million  (43% of revenue)  — up 18% YoY
+  Widget Lite:     $1.2 million  (29% of revenue)  — up 6% YoY
+  Support Plans:   $800,000      (19% of revenue)  — up 31% YoY
+  Consulting:      $400,000      ( 9% of revenue)  — down 8% YoY
+
+Key Highlights
+--------------
+- Widget Pro growth driven by 3 new enterprise contracts in EMEA
+- Support Plans fastest-growing segment; expanded customer success team in July
+- Consulting decline reflects strategic shift away from one-time engagements
+- New customers acquired: 234 (vs 198 in Q3 2023, +18%)
+- Customer churn rate: 2.1% (improved from 2.8% in Q3 2023)
+- Average contract value increased 9% to $18,400
+
+Revenue by Region
+-----------------
+  North America:  $2.1 million  (50%)
+  Europe:         $1.3 million  (31%)
+  Asia Pacific:   $0.8 million  (19%)
+
+Expenses
+--------
+  COGS:           $1.4 million  (33% of revenue)
+  R&D:            $0.6 million  (14% of revenue)
+  Sales & Mktg:   $0.5 million  (12% of revenue)
+  G&A:            $0.9 million  (21% of revenue)
+  Net Income:     $0.8 million  (19% of revenue)
+
+Q4 2024 Outlook
+---------------
+Target revenue: $4.8 million
+Full year 2024 target: $16.5 million
+Key initiatives: Widget Pro enterprise expansion, APAC marketing push

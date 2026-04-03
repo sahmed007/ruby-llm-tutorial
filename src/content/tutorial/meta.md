@@ -20,4 +20,6 @@ terminal:
       title: 'Command Line'
       allowRedirects: true
     - ['output', 'Setup Logs']
+i18n:
+  webcontainerLinkText: 'Built by <a href="https://chamoylabs.com">Chamoy Labs</a> based on <a href="https://rubyllm.com/">RubyLLM</a> by <a href="https://paolino.me/">Carmine Paolino</a>'
 ---

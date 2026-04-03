@@ -10,7 +10,7 @@ custom:
 
 # Exploring the Model Registry
 
-RubyLLM ships with a **built-in registry** of 800+ models across all supported providers. The registry is bundled with the gem — no API calls or keys needed to browse it.
+RubyLLM ships with a **built-in registry** of 600+ models across all supported providers. The registry is bundled with the gem — no API calls or keys needed to browse it.
 
 ## The Registry API
 
@@ -85,4 +85,38 @@ RubyLLM.models.chat_models.min_by(&:input_price_per_million)
 
 # Group models by provider
 RubyLLM.models.all.group_by(&:provider).transform_values(&:count)
+
+# Filter by model family
+RubyLLM.models.by_family("claude3_sonnet")
 ```
+
+## Custom Endpoints & Unlisted Models
+
+Some deployments use custom API endpoints (Azure OpenAI, local Ollama, etc.) or models not yet in the registry. Use `assume_model_exists: true` to bypass registry validation:
+
+```ruby
+# Azure OpenAI endpoint
+RubyLLM.configure do |config|
+  config.openai_api_base = "https://YOUR_RESOURCE.openai.azure.com"
+  config.openai_api_key  = ENV["AZURE_OPENAI_KEY"]
+end
+
+chat = RubyLLM.chat(
+  model: "my-gpt4-deployment",
+  provider: :openai,
+  assume_model_exists: true
+)
+```
+
+The `provider:` keyword is required when assuming existence — it tells RubyLLM which API format to use.
+
+## Keeping the Registry Fresh
+
+The bundled registry is a snapshot. To pull the latest models from all configured providers:
+
+```ruby
+RubyLLM.models.refresh!             # update in memory
+RubyLLM.models.save_to_json         # persist to disk
+```
+
+In a Rails app, run this after initial setup. The `rake models:update` task is for gem maintainers only — use `refresh!` in application code.

@@ -8,11 +8,12 @@ end
 #
 # The registry lives at RubyLLM.models and has these methods:
 #
-#   RubyLLM.models.all              — every registered model
-#   RubyLLM.models.chat_models      — only chat/completion models
-#   RubyLLM.models.embedding_models — only embedding models
-#   RubyLLM.models.by_provider(:openai) — filter by provider
-#   RubyLLM.models.find("gpt-4o")  — find a specific model
+#   RubyLLM.models.all                   — every registered model
+#   RubyLLM.models.chat_models           — only chat/completion models
+#   RubyLLM.models.embedding_models      — only embedding models
+#   RubyLLM.models.by_provider(:openai)  — filter by provider
+#   RubyLLM.models.by_family("claude3_sonnet") — filter by model family
+#   RubyLLM.models.find("gpt-4o")        — find a specific model
 #
 # Each model has: .id, .provider, .context_window,
 #   .supports_vision?, .input_price_per_million, .output_price_per_million
@@ -22,6 +23,7 @@ end
 #   2. Print a list of unique providers
 #   3. Print the first 10 chat models (id, provider, context window)
 #   4. Find and display details about a specific model
+#   5. (Bonus) Find the cheapest chat model by input price
 
 puts "=== RubyLLM Model Registry ==="
 puts

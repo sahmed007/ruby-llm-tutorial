@@ -24,10 +24,14 @@ By the end of this tutorial, you'll be able to:
 - **Explore the model registry** to discover and compare available models
 - **Build multi-turn conversations** with persistent context
 - **Stream responses** in real time as the model generates them
+- **Send files and images** alongside messages with multi-modal input
 - **Generate embeddings** and work with vector representations of text
+- **Generate images** from text prompts with DALL-E and Imagen
+- **Transcribe audio** to text with Whisper and GPT-4o Transcribe
 - **Create AI tools** using plain Ruby classes — no JSON schema boilerplate
 - **Build agents** that reason, plan, and call tools autonomously
 - **Extract structured data** from unstructured text using typed outputs
+- **Compose agentic workflows** — sequential pipelines and evaluation loops
 
 ## Prerequisites
 

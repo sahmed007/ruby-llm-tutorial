@@ -121,3 +121,44 @@ end
 search = DocumentSearch.new(my_database)
 chat.with_tool(search)
 ```
+
+## Stopping After a Tool Call
+
+Sometimes a tool should write something and you want to skip the LLM's summary step. Use `halt` to return immediately without sending the result back through the model:
+
+```ruby
+class SaveFile < RubyLLM::Tool
+  description "Saves content to a file"
+  param :path, desc: "File path"
+  param :content, desc: "Content to save"
+
+  def execute(path:, content:)
+    File.write(path, content)
+    halt "Saved #{content.length} bytes to #{path}"
+  end
+end
+```
+
+With `halt`, the string is returned directly to your code — the model never sees it. Without `halt`, the result goes back to the model which generates a natural language response.
+
+## Error Handling
+
+Return a hash with an `error` key for **recoverable errors** — the model can read the error and try again with corrected parameters:
+
+```ruby
+def execute(location:)
+  return { error: "Location must be at least 3 characters" } if location.length < 3
+  fetch_weather(location)
+end
+```
+
+Raise exceptions for **unrecoverable errors** — missing API keys, broken dependencies:
+
+```ruby
+def execute(query:)
+  raise "DATABASE_URL not set" unless ENV["DATABASE_URL"]
+  @db.search(query)
+end
+```
+
+The distinction matters: a recoverable error lets the AI retry with different arguments; an unrecoverable one should stop execution immediately.

@@ -34,3 +34,11 @@ if model
   puts "  Input price:    $#{model.input_price_per_million}/M tokens"
   puts "  Output price:   $#{model.output_price_per_million}/M tokens"
 end
+puts
+
+# 5. Bonus: find the cheapest chat model
+cheapest = RubyLLM.models.chat_models.min_by(&:input_price_per_million)
+if cheapest
+  puts "Cheapest chat model by input price:"
+  puts "  #{cheapest.id} (#{cheapest.provider}) — $#{cheapest.input_price_per_million}/M tokens"
+end
