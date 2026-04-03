@@ -12,7 +12,7 @@ chat = RubyLLM.chat
 
 # Step 1: Ask with attachment — document enters conversation context
 response = chat.ask("Summarize this quarterly report in 3 bullet points.",
-                    with: "chat/report.txt")
+                    with: "report.txt")
 puts response.content
 puts "(#{response.input_tokens} input tokens)"
 puts

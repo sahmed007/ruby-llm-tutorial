@@ -38,9 +38,9 @@ Files are read, encoded, and sent to the model automatically. No manual base64 e
 
 ## Your Task
 
-A sample quarterly report is at `chat/report.txt`. Open `multimodal.rb` and:
+A sample quarterly report is at `report.txt`. Open `multimodal.rb` and:
 
-1. **Ask the AI to summarize** the document by passing it with `with: "chat/report.txt"`
+1. **Ask the AI to summarize** the document by passing it with `with: "report.txt"`
 2. **Ask a follow-up question** about specific data — the document stays in context for the whole conversation
 3. **Print token usage** from the response metadata
 
@@ -49,7 +49,7 @@ chat = RubyLLM.chat
 
 # Ask about the document
 response = chat.ask("Summarize this quarterly report in 3 bullet points.",
-                    with: "chat/report.txt")
+                    with: "report.txt")
 puts response.content
 puts "(#{response.input_tokens} input tokens)"
 puts

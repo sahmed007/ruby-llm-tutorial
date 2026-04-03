@@ -15,7 +15,9 @@
       "WebFetch(domain:rails-tutorial.evilmartians.io)",
       "Bash(cat /Users/samad/Dev/ruby-llm-tutorial/node_modules/@tutorialkit-rb/astro/dist/default/pages/[...slug].astro)",
       "Bash(gh api:*)",
-      "Bash(grep -r \"Schema\\\\|schema\\\\|with_schema\\\\|output_schema\" /Users/samad/Dev/ruby-llm-tutorial/ruby-wasm/vendor/bundle/ruby/3.3.0/gems/ruby_llm-*/lib/)"
+      "Bash(grep -r \"Schema\\\\|schema\\\\|with_schema\\\\|output_schema\" /Users/samad/Dev/ruby-llm-tutorial/ruby-wasm/vendor/bundle/ruby/3.3.0/gems/ruby_llm-*/lib/)",
+      "Bash(sed -i '' 's|with: \"chat/report.txt\"|with: \"report.txt\"|g' /Users/samad/Dev/ruby-llm-tutorial/src/content/tutorial/2-chat/4-multimodal/_solution/workspace/chat/multimodal.rb /Users/samad/Dev/ruby-llm-tutorial/src/content/tutorial/2-chat/4-multimodal/_files/workspace/chat/multimodal.rb /Users/samad/Dev/ruby-llm-tutorial/src/content/tutorial/2-chat/4-multimodal/content.md)",
+      "Bash(sed -i '' 's|at `chat/report.txt`|at `report.txt`|g' /Users/samad/Dev/ruby-llm-tutorial/src/content/tutorial/2-chat/4-multimodal/content.md)"
     ]
   }
 }
